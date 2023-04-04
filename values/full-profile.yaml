@@ -63,12 +63,12 @@ tap_gui:
       providers:
         github:
           development:
-            clientId: 'cd8fa4c204b15976649f'
-            clientSecret: 'e7d1184affa99f42b93940cbdb0debdc5a171245'
+            clientId: #@ data.values.tap.auth.github.clientId
+            clientSecret: #@ data.values.tap.auth.github.clientSecret
     organization:
-      name: 'TAXUD Dev Center'
+      name: 'ORG NAME'
     customize:
-      custom_name: 'TAXUD Dev Center'
+      custom_name: 'CUSTOM NAME'
     backend:
       baseUrl: #@ "https://tap-gui.{}".format(data.values.tap.ingress.domain)
       cors:
@@ -78,7 +78,7 @@ tap_gui:
           - host: #@ "*.{}".format(data.values.tap.ingress.domain)
     app:
       baseUrl: #@ "https://tap-gui.{}".format(data.values.tap.ingress.domain)
-      title: 'TAXUD Dev Center'
+      title: 'CUSTOM TITLE'
     catalog:
       locations:
         - type: url
