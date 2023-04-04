@@ -1,0 +1,25 @@
+apiVersion: run.tanzu.vmware.com/v1alpha2
+kind: TanzuKubernetesCluster
+metadata:
+  name: dev-01
+spec:
+  distribution:
+    version: 1.22.9
+  settings:
+    storage:
+      defaultClass: tanzu
+  topology:
+    controlPlane:
+      replicas: 3
+      storageClass: tanzu
+      vmClass: best-effort-medium
+    nodePools:
+    - name: default-nodepool
+      replicas: 3
+      storageClass: tanzu
+      vmClass: best-effort-2xlarge
+      volumes:
+        - name: containerd
+          mountPath: /var/lib/containerd
+          capacity:
+            storage: 200Gi

@@ -1,0 +1,26 @@
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageInstall
+metadata:
+  name: contour
+  namespace: tap-install
+spec:
+  serviceAccountName: contour-tap-install-sa
+  packageRef:
+    refName: contour.tanzu.vmware.com
+    versionSelection:
+      constraints: "1.22.3+tap.0"
+      prereleases: {}
+  values:
+  - secretRef:
+      name: contour-values
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: contour-values
+  namespace: tap-install
+stringData:
+  values.yaml: |
+    envoy:
+      service:
+        type: LoadBalancer

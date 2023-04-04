@@ -1,0 +1,5 @@
+.vscode/
+downloads/
+generated/
+values/default.yaml
+.DS_Store

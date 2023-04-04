@@ -1,0 +1,72 @@
+#@ load("@ytt:data", "data")
+---
+apiVersion: projectcontour.io/v1
+kind: TLSCertificateDelegation
+metadata:
+  name: contour-delegation
+  namespace: tap-install
+spec:
+  delegations:
+    - secretName: tap-gui-tls
+      targetNamespaces:
+        - "tap-gui"
+    - secretName: harbor-tls
+      targetNamespaces:
+        - "tanzu-system-registry"
+    - secretName: cloudfusion-tls
+      targetNamespaces:
+        - "team-tanzu"
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: tap-gui-certificate
+  namespace: tap-install
+spec:
+  commonName: #@ "tap-gui.{}".format(data.values.tap.ingress.domain)
+  dnsNames:
+  - #@ "tap-gui.{}".format(data.values.tap.ingress.domain)
+  issuerRef:
+    name: letsencrypt-contour-cluster-issuer
+    kind: ClusterIssuer
+  subject:
+    organizations:
+    - vmware
+  renewBefore: 360h0m0s
+  secretName: tap-gui-tls
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: harbor-certificate
+  namespace: tap-install
+spec:
+  commonName: #@ "harbor.{}".format(data.values.tap.ingress.domain)
+  dnsNames:
+  - #@ "harbor.{}".format(data.values.tap.ingress.domain)
+  issuerRef:
+    name: letsencrypt-contour-cluster-issuer
+    kind: ClusterIssuer
+  subject:
+    organizations:
+    - vmware
+  renewBefore: 360h0m0s
+  secretName: harbor-tls
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: cloudfusion-certificate
+  namespace: tap-install
+spec:
+  commonName: #@ "cloudfusion-tap.{}".format(data.values.tap.ingress.domain)
+  dnsNames:
+  - #@ "cloudfusion-tap.{}".format(data.values.tap.ingress.domain)
+  issuerRef:
+    name: letsencrypt-contour-cluster-issuer
+    kind: ClusterIssuer
+  subject:
+    organizations:
+    - proximus
+  renewBefore: 360h0m0s
+  secretName: cloudfusion-tls
